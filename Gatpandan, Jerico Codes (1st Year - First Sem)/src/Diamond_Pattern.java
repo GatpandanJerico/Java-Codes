@@ -21,10 +21,10 @@ public class Diamond_Pattern {
             System.out.print(" ");
         }
         for (int i = 0; i <= x; i++) {
-            System.out.print("#");
+            System.out.print(i);
         }
         for (int i = 0; i < x; i++) {
-            System.out.print("#");
+            System.out.print(i);
         }
         System.out.print("\n");
     }
