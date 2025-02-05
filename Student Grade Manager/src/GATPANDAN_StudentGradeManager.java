@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 public class GATPANDAN_StudentGradeManager {
 	static int failedStudents = 0;
-    static int passedStudent = 0;
+	static int passedStudent = 0;
+
 	public static void main(String[] args) throws IOException {
 		File file = new File("src\\Student Info.txt");
 
@@ -16,7 +17,7 @@ public class GATPANDAN_StudentGradeManager {
 		try (FileWriter filewriter = new FileWriter("src\\Student Info.txt", true);
 				PrintWriter printWriter = new PrintWriter(filewriter)) {
 			Scanner input = new Scanner(System.in);
-			
+
 			do {
 				int quizGrade, activityGrade, examGrade;
 				System.out.print("Enter Name: ");
@@ -42,42 +43,42 @@ public class GATPANDAN_StudentGradeManager {
 				double average = (0.30 * quizGrade) + (0.30 * activityGrade) + (0.40 * examGrade);
 
 				if (average >= 75) {
-                    passedStudent++;
-                } else {
-                    failedStudents++;
-                }
+					passedStudent++;
+				} else {
+					failedStudents++;
+				}
 
 				printWriter.println(name + "," + quizGrade + "," + activityGrade + "," + examGrade + "," + average);
 
 				System.out.println("\nNumber of Passed: " + passedStudent);
-                System.out.println("Number of Failed: " + failedStudents);
+				System.out.println("Number of Failed: " + failedStudents);
 
-                System.out.print("\nDo you want to enter again? (Yes/No) ");
-                String choice = input.nextLine().trim();
-                if (choice.equalsIgnoreCase("No")) {
-                    break;
-                }
+				System.out.print("\nDo you want to enter again? (Yes/No) ");
+				String choice = input.nextLine().trim();
+				if (choice.equalsIgnoreCase("No")) {
+					break;
+				}
 
 			} while (true);
-		} 
+		}
 	}
 
 	private static void countPassers(Scanner fileScanner) {
 		while (fileScanner.hasNext()) {
-            String line = fileScanner.nextLine();
-            String[] tokens = line.split(",");
-            if (tokens.length >= 5) {
-                try {
-                    double average = Double.parseDouble(tokens[4]);
-                    if (average >= 75) {
-                        passedStudent++;
-                    } else {
-                        failedStudents++;
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println("Error parsing average from line: " + line);
-                }
-            }
-        }
+			String line = fileScanner.nextLine();
+			String[] tokens = line.split(",");
+			if (tokens.length >= 5) {
+				try {
+					double average = Double.parseDouble(tokens[4]);
+					if (average >= 75) {
+						passedStudent++;
+					} else {
+						failedStudents++;
+					}
+				} catch (NumberFormatException e) {
+					System.err.println("Error parsing average from line: " + line);
+				}
+			}
+		}
 	}
 }
