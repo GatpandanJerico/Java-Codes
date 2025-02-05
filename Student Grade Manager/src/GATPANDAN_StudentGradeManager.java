@@ -5,7 +5,7 @@ public class GATPANDAN_StudentGradeManager {
 	static int failedStudents = 0;
     static int passedStudent = 0;
 	public static void main(String[] args) throws IOException {
-		File file = new File("Student Info.txt");
+		File file = new File("src\\Student Info.txt");
 
 		if (file.exists()) {
 			Scanner fileScanner = new Scanner(file);
@@ -13,9 +13,10 @@ public class GATPANDAN_StudentGradeManager {
 			fileScanner.close();
 		}
 
-		try (FileWriter filewriter = new FileWriter("Student Info.txt", true);
+		try (FileWriter filewriter = new FileWriter("src\\Student Info.txt", true);
 				PrintWriter printWriter = new PrintWriter(filewriter)) {
 			Scanner input = new Scanner(System.in);
+			
 			do {
 				int quizGrade, activityGrade, examGrade;
 				System.out.print("Enter Name: ");
