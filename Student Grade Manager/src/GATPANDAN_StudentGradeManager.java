@@ -2,26 +2,51 @@ import java.io.*;
 import java.util.Scanner;
 
 public class GATPANDAN_StudentGradeManager {
-	static int failedStudents = 0;
-	static int passedStudent = 0;
-	static final int MIN_GRADE = 60;
-	static final int PASSING_AVERAGE = 75;
+	private static final int PASSING_AVERAGE = 75;
+	private static final int MIN_GRADE = 60;
+	private static int failedStudents = 0;
+	private static int passedStudent = 0;
 
-	public static void main(String[] args) throws IOException {
-		File file = new File("src\\Student Info.txt");
+	static class Student {
 
-		if (file.exists()) {
-			Scanner fileScanner = new Scanner(file);
-			countPassers(fileScanner);
-			fileScanner.close();
+		String name;
+		int quizGrade;
+		int activityGrade;
+		int examGrade;
+		double average;
+
+		public Student(String name, int quizGrade, int activityGrade, int examGrade) {
+			this.name = name;
+			this.quizGrade = quizGrade;
+			this.activityGrade = activityGrade;
+			this.examGrade = examGrade;
+			this.average = calculateAverage();
 		}
 
-		try (FileWriter filewriter = new FileWriter("src\\Student Info.txt", true);
+		private double calculateAverage() {
+			return (0.30 * quizGrade) + (0.30 * activityGrade) + (0.40 * examGrade);
+		}
+
+		public boolean hasPassed() {
+			return average >= PASSING_AVERAGE;
+		}
+
+	}
+
+	public static void main(String[] args) throws IOException {
+		File file = new File("Student Info.txt");
+
+		if (file.exists()) {
+			try (Scanner fileScanner = new Scanner(file)) {
+				countPassers(fileScanner);
+			}
+		}
+
+		try (FileWriter filewriter = new FileWriter("Student Info.txt", true);
 				PrintWriter printWriter = new PrintWriter(filewriter)) {
 			Scanner input = new Scanner(System.in);
 
 			do {
-				int quizGrade, activityGrade, examGrade;
 				System.out.print("Enter Name: ");
 				String name = input.nextLine();
 
@@ -31,18 +56,18 @@ public class GATPANDAN_StudentGradeManager {
 				for (int i = 0; i < gradeTypes.length; i++) {
 					grades[i] = getGrade(input, gradeTypes[i]);
 				}
-
 				input.nextLine();
 
-				double average = (0.30 * quizGrade) + (0.30 * activityGrade) + (0.40 * examGrade);
+				Student student = new Student(name, grades[0], grades[1], grades[2]);
 
-				if (average >= 75) {
+				if (student.hasPassed()) {
 					passedStudent++;
 				} else {
 					failedStudents++;
 				}
 
-				printWriter.println(name + "," + quizGrade + "," + activityGrade + "," + examGrade + "," + average);
+				printWriter.println(student.name + "," + student.quizGrade + "," + student.activityGrade + ","
+						+ student.examGrade + "," + student.average);
 
 				System.out.println("\nNumber of Passed: " + passedStudent);
 				System.out.println("Number of Failed: " + failedStudents);
@@ -59,21 +84,30 @@ public class GATPANDAN_StudentGradeManager {
 
 	private static int getGrade(Scanner input, String gradeType) {
 		int grade;
-		do {
-			System.out.println("Enter your " + gradeType + "grade: ");
-			grade = input.nextInt();
-		} while (grade < MIN_GRADE || grade > 100);
-		return grade;
+		while (true) {
+			System.out.print("Enter your " + gradeType + " grade: ");
+			if (input.hasNextInt()) {
+				grade = input.nextInt();
+				if (grade >= MIN_GRADE && grade <= 100) {
+					return grade;
+				}
+			} else {
+				input.next();
+			}
+			System.out.println("Invalid input. Enter a number between " + MIN_GRADE + " and 100.");
+		}
 	}
 
 	private static void countPassers(Scanner fileScanner) {
+		passedStudent = 0;
+		failedStudents = 0;
 		while (fileScanner.hasNext()) {
 			String line = fileScanner.nextLine();
 			String[] tokens = line.split(",");
 			if (tokens.length >= 5) {
 				try {
-					double average = Double.parseDouble(tokens[4]);
-					if (average >= 75) {
+					double averageGrade = Double.parseDouble(tokens[4]);
+					if (averageGrade >= PASSING_AVERAGE) {
 						passedStudent++;
 					} else {
 						failedStudents++;
@@ -84,4 +118,5 @@ public class GATPANDAN_StudentGradeManager {
 			}
 		}
 	}
+
 }
