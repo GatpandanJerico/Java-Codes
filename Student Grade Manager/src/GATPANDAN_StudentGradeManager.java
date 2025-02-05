@@ -4,6 +4,8 @@ import java.util.Scanner;
 public class GATPANDAN_StudentGradeManager {
 	static int failedStudents = 0;
 	static int passedStudent = 0;
+	static final int MIN_GRADE = 60;
+	static final int PASSING_AVERAGE = 75;
 
 	public static void main(String[] args) throws IOException {
 		File file = new File("src\\Student Info.txt");
@@ -23,20 +25,12 @@ public class GATPANDAN_StudentGradeManager {
 				System.out.print("Enter Name: ");
 				String name = input.nextLine();
 
-				do {
-					System.out.print("Enter your quiz grade: ");
-					quizGrade = input.nextInt();
-				} while (quizGrade < 60 || quizGrade > 100);
-
-				do {
-					System.out.print("Enter your activity grade: ");
-					activityGrade = input.nextInt();
-				} while (activityGrade < 60 || activityGrade > 100);
-
-				do {
-					System.out.print("Enter your exam grade: ");
-					examGrade = input.nextInt();
-				} while (examGrade < 60 || examGrade > 100);
+				// Prompt the user to enter the grades
+				String[] gradeTypes = { "quiz", "activity", "exam" };
+				int[] grades = new int[3];
+				for (int i = 0; i < gradeTypes.length; i++) {
+					grades[i] = getGrade(input, gradeTypes[i]);
+				}
 
 				input.nextLine();
 
@@ -61,6 +55,15 @@ public class GATPANDAN_StudentGradeManager {
 
 			} while (true);
 		}
+	}
+
+	private static int getGrade(Scanner input, String gradeType) {
+		int grade;
+		do {
+			System.out.println("Enter your " + gradeType + "grade: ");
+			grade = input.nextInt();
+		} while (grade < MIN_GRADE || grade > 100);
+		return grade;
 	}
 
 	private static void countPassers(Scanner fileScanner) {
