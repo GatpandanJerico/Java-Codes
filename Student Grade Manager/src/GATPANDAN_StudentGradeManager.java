@@ -93,8 +93,8 @@ public class GATPANDAN_StudentGradeManager {
 						+ student.examGrade + "," + String.format("%.1f", student.average) + "\n");
 
 				// Display the number of passed and failed student in the console
-				System.out.println("\nNumber of Passed: " + passedStudent);
-				System.out.println("Number of Failed: " + failedStudents);
+				System.out.println("\nTotal Number of Failed: " + failedStudents);
+				System.out.println("Total Number of Passed: " + passedStudent);
 
 				// Ask user to if they want to continue
 				while (true) {
@@ -152,5 +152,4 @@ public class GATPANDAN_StudentGradeManager {
 			}
 		}
 	}
-
 }
